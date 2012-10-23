@@ -3,6 +3,9 @@
   <component name="DaemonCodeAnalyzer">
     <disable_hints />
   </component>
+  <component name="EntryPointsManager">
+    <entry_points version="2.0" />
+  </component>
   <component name="IdProvider" IDEtalkID="3C753BD8838417E9573E2B9CB0BD20C4" />
   <component name="MavenProjectsManager">
     <option name="originalFiles">
