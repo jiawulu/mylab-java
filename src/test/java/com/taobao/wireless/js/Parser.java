@@ -1,6 +1,7 @@
 package com.taobao.wireless.js;
 
 import com.taobao.wireless.net.FileUtils;
+import junit.framework.Assert;
 import org.junit.Test;
 import sun.org.mozilla.javascript.internal.NativeArray;
 import sun.org.mozilla.javascript.internal.NativeObject;
@@ -50,6 +51,9 @@ public class Parser {
 
         //ADD REGEX CHECK!!!
 
+
+        Assert.assertTrue((Boolean) engine.eval("testRoute('detail\\\\/(P<pid>\\\\d+)\\\\/?','detail/123456')"));
+        Assert.assertFalse((Boolean) engine.eval("testRoute('detail\\\\/(P<pid>\\\\d+)\\\\/?','desc/123456')"));
 
 
     }

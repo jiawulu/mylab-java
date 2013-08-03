@@ -13,3 +13,13 @@ window = {
     }
 };
 
+var PERL_REGEXP = /P\<([a-z0-9_-][a-z0-9_-]*?)\>/gi,
+    ARGS_SPLITER = '!';
+function testRoute(routeText,fragment) {
+    routeText = routeText.replace(PERL_REGEXP, '');
+    return new RegExp('^(' + routeText + ')(' + ARGS_SPLITER + '.*?)?$').test(fragment);
+}
+
+
+
+
