@@ -2,31 +2,56 @@ package com.taobao.wireless.js;
 
 import com.taobao.wireless.net.FileUtils;
 import org.junit.Test;
-import sun.org.mozilla.javascript.internal.Context;
-import sun.org.mozilla.javascript.internal.Scriptable;
+import sun.org.mozilla.javascript.internal.NativeArray;
+import sun.org.mozilla.javascript.internal.NativeObject;
 
-/**
- * Created with IntelliJ IDEA.
- * User: wuzhong
- * Date: 13-8-2
- * Time: 下午4:44
- * To change this template use File | Settings | File Templates.
- */
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+
 public class Parser {
 
-    String URL = "http://a.tbcdn.cn/g/mtb/app-item/page_item.js";
-    @Test
-    public void parseJS() {
-        //1、通过Http请求获取js的String数据，格式如上
-        String source = FileUtils.readUrl(URL).toString();
-        //2、定义跟js中的Class的声明
+    String URL = "http://a.tbcdn.cn/g/mtb/app-item/page_desc.js";
 
-        //3、初始化Context
-        Context cx = Context.enter();
-        Scriptable scope = cx.initStandardObjects();
-        Object result = cx.evaluateString(scope, "{a:1};", "return", 1, null);
-        System.out.println(result);
-        Context.exit();
+    @Test
+    public void parseJS() throws ScriptException, IOException {
+
+        ScriptEngineManager manager = new ScriptEngineManager();
+        ScriptEngine engine = manager.getEngineByName("JavaScript");
+
+        // Run InvScript.js
+        Reader scriptReader = new InputStreamReader(
+                Parser.class.getResourceAsStream("app.js"));
+        try {
+            engine.eval(scriptReader);
+        } finally {
+            scriptReader.close();
+        }
+
+        String source = FileUtils.readUrl(URL).toString();
+        engine.eval(source);
+
+        Object result = engine.eval("window.PAGECONFIG;");
+
+        NativeObject a = (NativeObject)result;
+
+        System.out.println(((NativeObject) result).get("name").toString());
+        System.out.println(((NativeObject) result).get("title").toString());
+        System.out.println(((NativeObject) result).get("route").toString());
+
+        NativeObject res = (NativeObject)a.get("resources");
+        NativeArray arr = (NativeArray) res.get("js");
+        for(int i=0; i < arr.getLength(); i++) {
+            System.out.println(arr.get(i, arr));
+        }
+
+        //ADD REGEX CHECK!!!
+
+
+
     }
 
 }
